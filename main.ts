@@ -11,15 +11,15 @@ Deno.serve(async (request) => {
     return new Response("Missing username", { status: 400 });
   }
 
-  const ratioResult = await kv.get<FollowRatio>(["ratio", username]);
+  const ratioKey = ["ratio", username];
+  const ratioResult = await kv.get<FollowRatio>(ratioKey);
   if (ratioResult?.value) {
     return Response.json(ratioResult.value);
   }
 
-  // Let data expire after 5 minutes.
   const ratio = await getRatio(username);
   await kv.set(
-    ["ratio", username],
+    ratioKey,
     ratio,
     { expireIn: 5 * MINUTE },
   );

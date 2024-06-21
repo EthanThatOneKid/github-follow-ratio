@@ -4,8 +4,8 @@
 export interface FollowRatio extends FollowerFollowingCount {
   ratio: number;
   difference: number;
-  notFollowingBackBy?: string[];
-  notFollowedBy?: string[];
+  notFollowingBack?: string[];
+  notFollowedBack?: string[];
 }
 
 export async function getRatio(
@@ -22,10 +22,10 @@ export async function getRatio(
 
   const followersList = await getFollowers(username);
   const followingList = await getFollowing(username);
-  const notFollowingBackBy = followersList.filter(
+  const notFollowingBack = followersList.filter(
     (follower) => !followingList.includes(follower),
   );
-  const notFollowedBy = followingList.filter(
+  const notFollowedBack = followingList.filter(
     (following) => !followersList.includes(following),
   );
 
@@ -34,8 +34,8 @@ export async function getRatio(
     ratio,
     followers,
     following,
-    notFollowingBackBy,
-    notFollowedBy,
+    notFollowingBack,
+    notFollowedBack,
   };
 }
 
