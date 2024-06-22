@@ -1,6 +1,9 @@
 {
   "lock": false,
-  "imports": { "@std/datetime": "jsr:@std/datetime@^0.224.1" },
+  "imports": {
+    "@fartlabs/rt": "jsr:@fartlabs/rt@^0.0.3",
+    "@std/datetime": "jsr:@std/datetime@^0.224.1"
+  },
   "tasks": {
     "dev": "deno run -A --watch --unstable-kv main.ts"
   }
