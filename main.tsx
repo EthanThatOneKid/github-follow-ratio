@@ -3,7 +3,6 @@ import { createRouter } from "@fartlabs/rt";
 import {
   A,
   BODY,
-  BR,
   BUTTON,
   DIV,
   FORM,
@@ -16,7 +15,6 @@ import {
   SCRIPT,
   TITLE,
 } from "@fartlabs/htx";
-import { LCARS } from "./lcars.tsx";
 import type { FollowRatio } from "./github.ts";
 import { getFollowRatio } from "./github.ts";
 
