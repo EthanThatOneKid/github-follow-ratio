@@ -32,7 +32,7 @@ async function getAndCacheFollowRatio(username: string): Promise<FollowRatio> {
   await kv.set(
     followRatioKey,
     followRatio,
-    { expireIn: 5 * MINUTE },
+    { expireIn: 15 * MINUTE },
   );
   return followRatio;
 }
