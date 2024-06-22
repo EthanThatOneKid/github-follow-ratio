@@ -6,12 +6,13 @@ export interface FollowRatio extends FollowerFollowingCount {
   difference: number;
   notFollowingBack?: string[];
   notFollowedBack?: string[];
+  followingEachOther?: string[];
 }
 
 export async function getRatio(
   username: string,
-  maxFollowers = 1000,
-  maxFollowing = 1000,
+  maxFollowers = 500,
+  maxFollowing = 500,
 ): Promise<FollowRatio> {
   const { followers, following } = await getFollowerFollowingCount(username);
   const difference = followers - following;
@@ -28,6 +29,9 @@ export async function getRatio(
   const notFollowedBack = followingList.filter(
     (following) => !followersList.includes(following),
   );
+  const followingEachOther = followersList.filter((follower) =>
+    followingList.includes(follower)
+  );
 
   return {
     difference,
@@ -36,6 +40,7 @@ export async function getRatio(
     following,
     notFollowingBack,
     notFollowedBack,
+    followingEachOther,
   };
 }
 
