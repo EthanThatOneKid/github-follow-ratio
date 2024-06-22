@@ -70,7 +70,7 @@ function Layout({ children }: { children?: string }) {
 function UsernameInputView({ username }: { username?: string }) {
   return (
     <DIV>
-      <H1>Follow Ratio</H1>
+      <H1>GitHub Follower to Following Ratio Calculator</H1>
       <P>Enter a username to get their follow ratio</P>
       <FORM action="" method="GET">
         <INPUT
@@ -79,7 +79,7 @@ function UsernameInputView({ username }: { username?: string }) {
           placeholder="Username"
           value={username}
         />
-        <BUTTON type="submit">Get Follow Ratio</BUTTON>
+        <BUTTON type="submit">Calculate Follow Ratio</BUTTON>
       </FORM>
     </DIV>
   );
