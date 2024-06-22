@@ -11,6 +11,7 @@ import {
   HTML,
   INPUT,
   LINK,
+  META,
   P,
   SCRIPT,
   TITLE,
@@ -36,11 +37,27 @@ async function getAndCacheFollowRatio(username: string): Promise<FollowRatio> {
   return followRatio;
 }
 
-function Layout({ children }: { children?: string }) {
+interface LayoutProps {
+  children?: string;
+  username?: string;
+  followRatio?: FollowRatio;
+}
+
+function Layout({ children, username, followRatio }: LayoutProps) {
   return "<!DOCTYPE html>" + (
     <HTML>
       <HEAD>
-        <TITLE>Follow Ratio</TITLE>
+        <META charset="UTF-8" />
+        <TITLE>
+          {username ? `@${username} | ` : ""}Github Follower to Following Ratio
+          Calculator
+        </TITLE>
+        <META
+          name="description"
+          content={followRatio
+            ? `Ratio: ${followRatio.ratio}, Followers: ${followRatio.followers}, Following: ${followRatio.following}, Difference: ${followRatio.difference}`
+            : "Want to know your GitHub follower to following ratio?"}
+        />
 
         <LINK
           rel="stylesheet"
