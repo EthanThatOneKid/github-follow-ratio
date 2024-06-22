@@ -9,7 +9,7 @@ export interface FollowRatio extends FollowerFollowingCount {
   followingEachOther?: string[];
 }
 
-export async function getRatio(
+export async function getFollowRatio(
   username: string,
   maxFollowers = 500,
   maxFollowing = 500,

@@ -1,6 +1,6 @@
 import { MINUTE } from "@std/datetime";
 import type { FollowRatio } from "./github.ts";
-import { getRatio } from "./github.ts";
+import { getFollowRatio } from "./github.ts";
 
 const kv = await Deno.openKv();
 
@@ -11,17 +11,17 @@ Deno.serve(async (request) => {
     return new Response("Missing username", { status: 400 });
   }
 
-  const ratioKey = ["ratio", username];
-  const ratioResult = await kv.get<FollowRatio>(ratioKey);
-  if (ratioResult?.value) {
-    return Response.json(ratioResult.value);
+  const followRatioKey: Deno.KvKey = ["followRatio", username];
+  const followRatioResult = await kv.get<FollowRatio>(followRatioKey);
+  if (followRatioResult?.value) {
+    return Response.json(followRatioResult.value);
   }
 
-  const ratio = await getRatio(username);
+  const followRatio = await getFollowRatio(username);
   await kv.set(
-    ratioKey,
-    ratio,
+    followRatioKey,
+    followRatio,
     { expireIn: 5 * MINUTE },
   );
-  return Response.json(ratio);
+  return Response.json(followRatio);
 });
