@@ -95,9 +95,9 @@ function FollowRatioView(props: {
   return (
     <DIV>
       <UsernameInputView username={props.username} />
+      <P>Ratio: {props.followRatio.ratio}</P>
       <P>Followers: {props.followRatio.followers}</P>
       <P>Following: {props.followRatio.following}</P>
-      <P>Ratio: {props.followRatio.ratio}</P>
       <P>Difference: {props.followRatio.difference}</P>
       <P>
         Not following back ({props.followRatio.notFollowingBack?.length}):{" "}
