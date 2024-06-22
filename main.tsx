@@ -120,7 +120,7 @@ function FollowRatioView(props: {
 }
 
 function GitHubProfileLink({ username }: { username: string }) {
-  return <A href={`https://github.com/${username}`}>@{username}</A>;
+  return <A href={`?username=${username}`}>@{username}</A>;
 }
 
 const router = createRouter()
