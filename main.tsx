@@ -56,7 +56,7 @@ function Layout({ children, username, followRatio }: LayoutProps) {
       <HEAD>
         <META charset="UTF-8" />
         <TITLE>
-          {username ? `@${username} | ` : ""}Github Follower to Following Ratio
+          {username ? `@${username} | ` : ""}GitHub Follower to Following Ratio
           Calculator
         </TITLE>
         <META
@@ -234,7 +234,9 @@ function FollowRatioView(props: FollowRatioViewProps) {
       </P>
 
       <DIV class="lcars-text-bar">
-        <SPAN>Following each other</SPAN>
+        <SPAN>
+          Following each other ({props.followRatio.followingEachOther?.length})
+        </SPAN>
       </DIV>
       <P>
         {props.followRatio.followingEachOther?.map((username) => (
