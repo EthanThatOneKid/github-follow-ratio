@@ -166,11 +166,12 @@ function Layout({ children, username, followRatio }: LayoutProps) {
 function UsernameInputView({ username }: { username?: string }) {
   return (
     <DIV>
-      <H1>GitHub Follower to Following Ratio Calculator</H1>
-      <P>
-        Enter a GitHub username to calculate their GitHub follower to following
-        ratio.
-      </P>
+      <H1 class="go-left">
+        GitHub Follower to Following Ratio Calculator
+      </H1>
+      <DIV class="lcars-text-bar">
+        <SPAN>Enter GitHub username</SPAN>
+      </DIV>
       <FORM action="" method="GET">
         <INPUT
           type="search"
@@ -192,6 +193,10 @@ interface FollowRatioViewProps {
 function FollowRatioView(props: FollowRatioViewProps) {
   return (
     <DIV>
+      <DIV class="lcars-text-bar">
+        <SPAN>{props.username}</SPAN>
+      </DIV>
+
       <DIV class="lcars-list-2 uppercase">
         <UL>
           <LI>Ratio: {props.followRatio.ratio}</LI>
@@ -201,21 +206,34 @@ function FollowRatioView(props: FollowRatioViewProps) {
         </UL>
       </DIV>
 
+      <DIV class="lcars-text-bar">
+        <SPAN>
+          Not following @{props.username}{" "}
+          back ({props.followRatio.notFollowingBack?.length})
+        </SPAN>
+      </DIV>
       <P>
-        Not following back ({props.followRatio.notFollowingBack?.length}):{" "}
         {props.followRatio.notFollowingBack?.map((username) => (
           <GitHubProfileLink username={username} />
         )).join(", ")}
       </P>
+
+      <DIV class="lcars-text-bar">
+        <SPAN>
+          Not followed back by @{props.username}{" "}
+          ({props.followRatio.notFollowedBack?.length})
+        </SPAN>
+      </DIV>
       <P>
-        Not followed back ({props.followRatio.notFollowedBack?.length}):{" "}
         {props.followRatio.notFollowedBack?.map((username) => (
           <GitHubProfileLink username={username} />
         )).join(", ")}
       </P>
+
+      <DIV class="lcars-text-bar">
+        <SPAN>Following each other</SPAN>
+      </DIV>
       <P>
-        Following each other ({props.followRatio.followingEachOther?.length}):
-        {" "}
         {props.followRatio.followingEachOther?.map((username) => (
           <GitHubProfileLink username={username} />
         )).join(", ")}
@@ -234,25 +252,32 @@ function GitHubProfileLink({ username }: GitHubProfileLinkProps) {
 
 const router = createRouter()
   .get("/", async (event) => {
-    const username = event.url.searchParams.get("username") ?? undefined;
-    const followRatio = username
-      ? await getAndCacheFollowRatio(username)
-      : undefined;
+    try {
+      const username = event.url.searchParams.get("username") ?? undefined;
+      const followRatio = username
+        ? await getAndCacheFollowRatio(username)
+        : undefined;
 
-    return new Response(
-      <Layout username={username} followRatio={followRatio}>
-        <UsernameInputView username={username} />
-        {username && followRatio
-          ? (
-            <FollowRatioView
-              username={username}
-              followRatio={followRatio}
-            />
-          )
-          : ""}
-      </Layout>,
-      { headers: { "Content-Type": "text/html" } },
-    );
+      return new Response(
+        <Layout username={username} followRatio={followRatio}>
+          <UsernameInputView username={username} />
+          {username && followRatio
+            ? (
+              <FollowRatioView
+                username={username}
+                followRatio={followRatio}
+              />
+            )
+            : ""}
+        </Layout>,
+        { headers: { "Content-Type": "text/html" } },
+      );
+    } catch (error) {
+      return new Response(
+        error,
+        { headers: { "Content-Type": "text/html" } },
+      );
+    }
   });
 
 Deno.serve((request) => router.fetch(request));
