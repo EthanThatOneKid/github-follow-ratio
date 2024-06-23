@@ -56,7 +56,7 @@ function Layout({ children, username, followRatio }: LayoutProps) {
       <HEAD>
         <META charset="UTF-8" />
         <TITLE>
-          {username ? `@${username} | ` : ""}Github Follower to Following Ratio
+          {username ? `@${username} | ` : ""}GitHub Follower to Following Ratio
           Calculator
         </TITLE>
         <META
