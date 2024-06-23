@@ -52,7 +52,10 @@ export interface FollowerFollowingCount {
 export async function getFollowerFollowingCount(
   username: string,
 ): Promise<FollowerFollowingCount> {
-  const user = await fetch(`https://api.github.com/users/${username}`);
+  const token = Deno.env.get("GITHUB_TOKEN");
+  const user = await fetch(`https://api.github.com/users/${username}`, {
+    headers: token ? { Authorization: `token ${token}` } : {},
+  });
   if (!user.ok) {
     throw new Error(`Failed to fetch user: ${user.statusText}`);
   }

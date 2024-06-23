@@ -10,6 +10,6 @@
     "jsxImportSource": "@fartlabs/htx"
   },
   "tasks": {
-    "dev": "deno run -A --watch --unstable-kv main.tsx"
+    "dev": "deno run -A --watch --env --unstable-kv main.tsx"
   }
 }
