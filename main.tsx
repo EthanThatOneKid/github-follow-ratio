@@ -210,8 +210,9 @@ function FollowRatioView(props: FollowRatioViewProps) {
 
       <DIV class="lcars-text-bar">
         <SPAN>
-          Not following <GitHubProfileLink username={props.username} />{" "}
-          back ({props.followRatio.notFollowingBack?.length})
+          Not followed back by <GitHubProfileLink username={props.username} />
+          {" "}
+          ({props.followRatio.notFollowingBack?.length})
         </SPAN>
       </DIV>
       <P>
@@ -222,9 +223,8 @@ function FollowRatioView(props: FollowRatioViewProps) {
 
       <DIV class="lcars-text-bar">
         <SPAN>
-          Not followed back by <GitHubProfileLink username={props.username} />
-          {" "}
-          ({props.followRatio.notFollowedBack?.length})
+          Not following <GitHubProfileLink username={props.username} />{" "}
+          back ({props.followRatio.notFollowedBack?.length})
         </SPAN>
       </DIV>
       <P>
