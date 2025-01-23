@@ -25,6 +25,42 @@ import {
 import type { FollowRatio } from "./github.ts";
 import { getFollowRatio } from "./github.ts";
 
+if (import.meta.main) {
+  const cache = await caches.open("github-follow-ratio");
+  const router = createRouter()
+    .get("/", async (event) => {
+      const cached = await cache.match(event.request);
+      if (cached) {
+        return cached;
+      }
+
+      return await renderPage(
+        event.url.searchParams.get("username") ?? undefined,
+      );
+    });
+
+  Deno.serve((request) => router.fetch(request));
+}
+
+async function renderPage(username?: string): Promise<Response> {
+  const followRatio = username ? await getFollowRatio(username) : undefined;
+
+  return new Response(
+    <Layout username={username} followRatio={followRatio}>
+      <UsernameInputView username={username} />
+      {username && followRatio
+        ? (
+          <FollowRatioView
+            username={username}
+            followRatio={followRatio}
+          />
+        )
+        : ""}
+    </Layout>,
+    { headers: { "Content-Type": "text/html" } },
+  );
+}
+
 interface LayoutProps {
   children?: string[];
   username?: string;
@@ -204,23 +240,23 @@ function FollowRatioView(props: FollowRatioViewProps) {
 
       <DIV class="lcars-text-bar">
         <SPAN>
-          Not following <GitHubProfileLink username={props.username} />{" "}
-          back ({props.followRatio.notFollowedBack?.length})
+          Following each other ({props.followRatio.followingEachOther?.length})
         </SPAN>
       </DIV>
       <P>
-        {props.followRatio.notFollowedBack?.map((username) => (
+        {props.followRatio.followingEachOther?.map((username) => (
           <GitHubProfileLink username={username} />
         )).join(", ")}
       </P>
 
       <DIV class="lcars-text-bar">
         <SPAN>
-          Following each other ({props.followRatio.followingEachOther?.length})
+          Not following <GitHubProfileLink username={props.username} />{" "}
+          back ({props.followRatio.notFollowedBack?.length})
         </SPAN>
       </DIV>
       <P>
-        {props.followRatio.followingEachOther?.map((username) => (
+        {props.followRatio.notFollowedBack?.map((username) => (
           <GitHubProfileLink username={username} />
         )).join(", ")}
       </P>
@@ -235,37 +271,3 @@ interface GitHubProfileLinkProps {
 function GitHubProfileLink({ username }: GitHubProfileLinkProps) {
   return <A href={`https://github.com/${username}`}>@{username}</A>;
 }
-
-const router = createRouter()
-  .get("/", async (event) => {
-    try {
-      const username = event.url.searchParams.get("username") ?? undefined;
-      const followRatio = username ? await getFollowRatio(username) : undefined;
-
-      return new Response(
-        <Layout username={username} followRatio={followRatio}>
-          <UsernameInputView username={username} />
-          {username && followRatio
-            ? (
-              <FollowRatioView
-                username={username}
-                followRatio={followRatio}
-              />
-            )
-            : ""}
-        </Layout>,
-        { headers: { "Content-Type": "text/html" } },
-      );
-    } catch (error) {
-      if (!(error instanceof Error)) {
-        throw error;
-      }
-
-      return new Response(
-        String(error),
-        { headers: { "Content-Type": "text/html" } },
-      );
-    }
-  });
-
-Deno.serve((request) => router.fetch(request));
