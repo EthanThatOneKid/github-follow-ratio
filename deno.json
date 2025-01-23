@@ -2,8 +2,7 @@
   "lock": false,
   "imports": {
     "@fartlabs/htx": "jsr:@fartlabs/htx@^0.0.9",
-    "@fartlabs/rt": "jsr:@fartlabs/rt@^0.0.3",
-    "@std/datetime": "jsr:@std/datetime@^0.225.3"
+    "@fartlabs/rt": "jsr:@fartlabs/rt@^0.0.3"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

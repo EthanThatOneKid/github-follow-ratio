@@ -1,4 +1,3 @@
-import { MINUTE } from "@std/datetime";
 import { createRouter } from "@fartlabs/rt";
 import {
   A,
@@ -25,24 +24,6 @@ import {
 } from "@fartlabs/htx";
 import type { FollowRatio } from "./github.ts";
 import { getFollowRatio } from "./github.ts";
-
-const kv = await Deno.openKv();
-
-async function getAndCacheFollowRatio(username: string): Promise<FollowRatio> {
-  const followRatioKey: Deno.KvKey = ["followRatio", username];
-  const followRatioResult = await kv.get<FollowRatio>(followRatioKey);
-  if (followRatioResult?.value) {
-    return followRatioResult.value;
-  }
-
-  const followRatio = await getFollowRatio(username);
-  await kv.set(
-    followRatioKey,
-    followRatio,
-    { expireIn: 15 * MINUTE },
-  );
-  return followRatio;
-}
 
 interface LayoutProps {
   children?: string[];
@@ -78,7 +59,7 @@ function Layout({ children, username, followRatio }: LayoutProps) {
         />
         <SCRIPT
           src="https://cdn.jsdelivr.net/gh/EthanThatOneKid/thelcars/assets/lcars.js"
-          defer
+          defer="true"
         >
         </SCRIPT>
         <SCRIPT src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js">
@@ -259,9 +240,7 @@ const router = createRouter()
   .get("/", async (event) => {
     try {
       const username = event.url.searchParams.get("username") ?? undefined;
-      const followRatio = username
-        ? await getAndCacheFollowRatio(username)
-        : undefined;
+      const followRatio = username ? await getFollowRatio(username) : undefined;
 
       return new Response(
         <Layout username={username} followRatio={followRatio}>
@@ -278,8 +257,12 @@ const router = createRouter()
         { headers: { "Content-Type": "text/html" } },
       );
     } catch (error) {
+      if (!(error instanceof Error)) {
+        throw error;
+      }
+
       return new Response(
-        error,
+        String(error),
         { headers: { "Content-Type": "text/html" } },
       );
     }
