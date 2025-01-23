@@ -1,15 +1,16 @@
 {
   "lock": false,
   "imports": {
-    "@fartlabs/htx": "jsr:@fartlabs/htx@^0.0.4",
+    "@fartlabs/htx": "jsr:@fartlabs/htx@^0.0.9",
     "@fartlabs/rt": "jsr:@fartlabs/rt@^0.0.3",
-    "@std/datetime": "jsr:@std/datetime@^0.224.1"
+    "@std/datetime": "jsr:@std/datetime@^0.225.3"
   },
   "compilerOptions": {
     "jsx": "react-jsx",
     "jsxImportSource": "@fartlabs/htx"
   },
   "tasks": {
-    "dev": "deno run -A --watch --env --unstable-kv main.tsx"
+    "dev": "deno run -A --watch --env --unstable-kv main.tsx",
+    "outdated": "deno outdated --latest --update"
   }
 }
