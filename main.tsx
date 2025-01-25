@@ -227,6 +227,18 @@ function FollowRatioView(props: FollowRatioViewProps) {
 
       <DIV class="lcars-text-bar">
         <SPAN>
+          Not following <GitHubProfileLink username={props.username} />{" "}
+          back ({props.followRatio.notFollowedBack?.length})
+        </SPAN>
+      </DIV>
+      <P>
+        {props.followRatio.notFollowedBack?.map((username) => (
+          <GitHubProfileLink username={username} />
+        )).join(", ")}
+      </P>
+
+      <DIV class="lcars-text-bar">
+        <SPAN>
           Not followed back by <GitHubProfileLink username={props.username} />
           {" "}
           ({props.followRatio.notFollowingBack?.length})
@@ -245,18 +257,6 @@ function FollowRatioView(props: FollowRatioViewProps) {
       </DIV>
       <P>
         {props.followRatio.followingEachOther?.map((username) => (
-          <GitHubProfileLink username={username} />
-        )).join(", ")}
-      </P>
-
-      <DIV class="lcars-text-bar">
-        <SPAN>
-          Not following <GitHubProfileLink username={props.username} />{" "}
-          back ({props.followRatio.notFollowedBack?.length})
-        </SPAN>
-      </DIV>
-      <P>
-        {props.followRatio.notFollowedBack?.map((username) => (
           <GitHubProfileLink username={username} />
         )).join(", ")}
       </P>
