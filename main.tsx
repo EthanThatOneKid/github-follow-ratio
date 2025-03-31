@@ -1,4 +1,4 @@
-import { createRouter } from "@fartlabs/rt";
+import { Router } from "@fartlabs/rt";
 import {
   A,
   BODY,
@@ -27,7 +27,7 @@ import { getFollowRatio } from "./github.ts";
 
 if (import.meta.main) {
   const cache = await caches.open("github-follow-ratio");
-  const router = createRouter()
+  const router = new Router()
     .get("/", async (event) => {
       const cached = await cache.match(event.request);
       if (cached) {
@@ -35,7 +35,7 @@ if (import.meta.main) {
       }
 
       return await renderPage(
-        event.url.searchParams.get("username") ?? undefined,
+        new URL(event.request.url).searchParams.get("username") ?? undefined,
       );
     });
 
